@@ -32,7 +32,9 @@ class ItemForm extends Component {
   }
 
   handleSubmit(event) {
+    console.log(this.state);
     this.setState(this.getInitialState());
+    console.log(this.state);
     event.preventDefault();
   }
 

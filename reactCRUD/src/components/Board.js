@@ -6,6 +6,9 @@ class Board extends Component {
     constructor(props){
         super(props);
         this.state = this.getInitialState();
+
+        this.eachItem = this.eachItem.bind(this);
+        this.removeItem = this.removeItem.bind(this);
     }
 
     getInitialState(){
@@ -13,18 +16,22 @@ class Board extends Component {
             products: AvailableItemsJSON.products
         }
     }
-
+    // "name" : "TV",
+    // "price" : 1000,
+    // "currency" : "USD"
     removeItem(i){
-        const arr = this.state.items
+        const arr = this.state.products;
+        arr.splice(i, 1);
+        this.setState({products: arr});
     }
     
     eachItem(item, i){
         return (
-            {
-                name: item.name,
-                price: item.price,
-                currency: item.currency
-            }
+            <Item key={i} index={i} deleteTableRow={this.removeItem}>
+            {item.name}
+            {item.price}
+            {item.currency}
+            </Item>
         );
     }
 
@@ -40,11 +47,7 @@ class Board extends Component {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>koko</td>
-                  <td>Anna</td>
-                  <td>Pitt</td>
-                </tr>
+                  {this.state.products.map(this.eachItem)}
               </tbody>
             </table>
             </div>
