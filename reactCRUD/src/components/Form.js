@@ -15,7 +15,7 @@ class ItemForm extends Component {
     return {
       name: 'Default Item',
       price: '9.99',
-      currency: 'eur'
+      currency: 'EUR'
     }
   }
 
@@ -32,15 +32,14 @@ class ItemForm extends Component {
   }
 
   handleSubmit(event) {
-    console.log(this.state);
+    this.props.addNewItem(this.state);
     this.setState(this.getInitialState());
-    console.log(this.state);
     event.preventDefault();
   }
 
   render() {
     return (
-      <form className="form-inline" onSubmit={this.handleSubmit}>
+      <form className="form-vertical col-sm-3" onSubmit={this.handleSubmit}>
 
         <div className="form-group">
           <label>Name: </label>
@@ -55,13 +54,12 @@ class ItemForm extends Component {
         <div className="form-group">
           <label>Currency: </label>
           <select className="form-control" value={this.state.currency} onChange={this.handleCurrencyChange}>
-            <option value="usd">USD</option>
-            <option value="eur">EUR</option>
-            <option value="gbp">GBP</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
           </select>
         </div>
-
-        <button type="submit" value="Submit" className="btn btn-default">Add Item</button>
+        <button type="submit" value="Submit" className="btn btn-primary">Add Item</button>
       </form>
     )
   }
