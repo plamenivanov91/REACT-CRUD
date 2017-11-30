@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import AvailableItemsJSON from '../availableItems/items';
 import Form from './Form';
 import Item from './Item';
 
 class Board extends Component {
     constructor(props){
         super(props);
-        this.state = this.getInitialState();
+        this.state = {
+            products: [],
+            isLoading: true    
+        };
 
         this.eachItem = this.eachItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
@@ -14,15 +16,44 @@ class Board extends Component {
         this.addItem = this.addItem.bind(this);
     }
 
-    getInitialState(){
-        return {
-            products: AvailableItemsJSON.products
-        }
+    componentDidMount(){
+        this.fetchData();
     }
-    
+
+    fetchData(){
+        fetch('https://api.myjson.com/bins/185esz')
+        .then(response => response.json())
+        .then(parsedJSON => parsedJSON.results.map(product => (
+            {
+                "name" : `${product.name}`,
+                "price" : `${product.price}`,
+                "currency" : `${product.currency}`
+            }
+        )))
+        .then(products => this.setState({
+            products,
+            isLoading: false
+        }))
+        .catch(error => console.log('parsing failed', error))
+    }
+
     addItem(item){
         const arr = this.state.products;
         arr.push(item);
+
+        fetch("https://api.myjson.com/bins/185esz", {
+            method: "post",
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+          
+            //make sure to serialize your JSON body
+            body: JSON.stringify(
+                this.state.products
+            )
+          })
+
         this.setState({products: arr});
     }
     
@@ -50,22 +81,29 @@ class Board extends Component {
     }
 
     render() {
+        const {isLoading, products} = this.state;
         return (
             <div>
                 <Form addNewItem={this.addItem}/>
-                <div className="table-responsive">          
-                <table className="table">
-                <thead>
-                    <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Currency</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.state.products.map(this.eachItem)}
-                </tbody>
-                </table>
+                <div className="table-responsive">
+                {
+                    !isLoading && products.length > 0 ? 
+                    
+                    <table className="table">
+                    <thead>
+                        <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Currency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.state.products.map(this.eachItem)}
+                    </tbody>
+                    </table>
+
+                    : null
+                }          
                 </div>
             </div>
         )
