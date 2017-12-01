@@ -57,7 +57,7 @@ class Board extends Component {
 
     eachItem(item, i) {
         return (
-            <Item key={i} index={i} deleteTableRow={this.removeItem} updateTableRow={this.updateItem}>
+            <Item key={i} index={i} deleteTableRow={this.removeItem} updateTableRow={this.updateItem} permissions={this.props.permissions}>
                 {item.name}
                 {item.price}
                 {item.currency}
@@ -87,7 +87,7 @@ class Board extends Component {
         const { isLoading, products } = this.state;
         return (
             <div>
-                <Form addNewItem={this.addItem} />
+                {this.props.permissions.CREATE ? <Form addNewItem={this.addItem} /> : null}
                 <div className="table-responsive">
                     {
                         !isLoading && products.length > 0 ?

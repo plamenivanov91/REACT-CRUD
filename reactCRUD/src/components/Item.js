@@ -42,8 +42,8 @@ class Item extends Component {
                 <td>{this.props.children[0]}</td>
                 <td>{this.props.children[1]}</td>
                 <td>{this.props.children[2]}</td>
-                <td><button onClick={this.remove} className="btn btn-danger">Delete</button></td>
-                <td><button onClick={this.update} className="btn btn-info">Update</button></td>
+                {this.props.permissions.DELETE ? <td><button onClick={this.remove} className="btn btn-danger">Delete</button></td> : null}
+                {this.props.permissions.UPDATE ? <td><button onClick={this.update} className="btn btn-info">Update</button></td> : null}
             </tr>
         )
     }
