@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 class Item extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {isUpdating: false};
+        this.state = { isUpdating: false };
         this.remove = this.remove.bind(this);
         this.update = this.update.bind(this);
         this.save = this.save.bind(this);
@@ -12,15 +12,15 @@ class Item extends Component {
         this.renderUpdating = this.renderUpdating.bind(this);
     }
 
-    remove(){
+    remove() {
         this.props.deleteTableRow(this.props.index);
     }
 
-    update(){
-        this.setState({isUpdating: true});
+    update() {
+        this.setState({ isUpdating: true });
     }
 
-    save(){
+    save() {
         this.props.updateTableRow(
             {
                 name: this.nameInput.value,
@@ -29,15 +29,15 @@ class Item extends Component {
             },
             this.props.index
         );
-        this.setState({isUpdating: false});
+        this.setState({ isUpdating: false });
     }
 
-    cancel(){
-        this.setState({isUpdating: false});
+    cancel() {
+        this.setState({ isUpdating: false });
     }
 
-    renderNormal(){
-        return(
+    renderNormal() {
+        return (
             <tr>
                 <td>{this.props.children[0]}</td>
                 <td>{this.props.children[1]}</td>
@@ -48,13 +48,13 @@ class Item extends Component {
         )
     }
 
-    renderUpdating(){
-        return(
+    renderUpdating() {
+        return (
             <tr>
-                <td><input type="text" className="form-control" ref = {(el) => {this.nameInput = el}}/></td>
-                <td><input type="number" className="form-control" ref = {(el) => {this.priceInput = el}}/></td>
+                <td><input type="text" className="form-control" ref={(el) => { this.nameInput = el }} /></td>
+                <td><input type="number" className="form-control" ref={(el) => { this.priceInput = el }} /></td>
                 <td>
-                    <select className="form-control" ref = {(el) => {this.currencyInput = el}}>
+                    <select className="form-control" ref={(el) => { this.currencyInput = el }}>
                         <option value="USD">USD</option>
                         <option value="EUR">EUR</option>
                         <option value="GBP">GBP</option>

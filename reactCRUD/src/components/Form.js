@@ -11,7 +11,7 @@ class ItemForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  getInitialState(){
+  getInitialState() {
     return {
       name: 'Default Item',
       price: '9.99',
@@ -38,22 +38,23 @@ class ItemForm extends Component {
   }
 
   render() {
+    const { name, price, currency } = this.state;
     return (
       <form className="form-vertical col-sm-3" onSubmit={this.handleSubmit}>
 
         <div className="form-group">
           <label>Name: </label>
-          <input type="text" className="form-control" value={this.state.name} onChange={this.handleNameChange} />
+          <input type="text" className="form-control" value={name} onChange={this.handleNameChange} />
         </div>
 
         <div className="form-group">
           <label>Price: </label>
-          <input type="number" className="form-control" value={this.state.price} onChange={this.handlePriceChange} />
+          <input type="number" className="form-control" value={price} onChange={this.handlePriceChange} />
         </div>
 
         <div className="form-group">
           <label>Currency: </label>
-          <select className="form-control" value={this.state.currency} onChange={this.handleCurrencyChange}>
+          <select className="form-control" value={currency} onChange={this.handleCurrencyChange}>
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
             <option value="GBP">GBP</option>
