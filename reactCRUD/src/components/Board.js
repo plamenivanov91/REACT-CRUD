@@ -7,7 +7,7 @@ class Board extends Component {
         super(props);
         this.state = {
             products: [],
-            isLoading: true
+            isReceiving: true
         };
 
         this.eachItem = this.eachItem.bind(this);
@@ -32,7 +32,7 @@ class Board extends Component {
             )))
             .then(products => this.setState({
                 products,
-                isLoading: false
+                isReceiving: false
             }))
             .catch(error => console.log('parsing failed', error))
     }
@@ -84,13 +84,13 @@ class Board extends Component {
     }
 
     render() {
-        const { isLoading, products } = this.state;
+        const { isReceiving, products } = this.state;
         return (
             <div>
                 {this.props.permissions.CREATE ? <Form addNewItem={this.addItem} /> : null}
                 <div className="table-responsive">
                     {
-                        !isLoading && products.length > 0 ?
+                        !isReceiving && products.length > 0 ?
 
                             <table className="table">
                                 <thead>
@@ -105,7 +105,13 @@ class Board extends Component {
                                 </tbody>
                             </table>
 
-                            : null
+                            : 
+                            
+                            <div className="load-bar">
+                                <div className="bar"></div>
+                                <div className="bar"></div>
+                                <div className="bar"></div>
+                            </div>
                     }
                 </div>
             </div>
