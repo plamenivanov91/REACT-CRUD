@@ -39,6 +39,7 @@ class ItemForm extends Component {
 
   render() {
     const { name, price, currency } = this.state;
+    const { isLoading } = this.props;
     return (
       <form className="form-vertical col-sm-3" onSubmit={this.handleSubmit}>
 
@@ -60,7 +61,7 @@ class ItemForm extends Component {
             <option value="GBP">GBP</option>
           </select>
         </div>
-        <button type="submit" value="Submit" className="btn btn-primary">Add Item</button>
+        <button type="submit" value="Submit" disabled={isLoading} className="btn btn-primary">{isLoading ? 'Adding Item...' : 'Add Item'}</button>
       </form>
     )
   }

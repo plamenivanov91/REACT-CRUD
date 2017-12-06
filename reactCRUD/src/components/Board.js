@@ -7,7 +7,8 @@ class Board extends Component {
         super(props);
         this.state = {
             products: [],
-            isReceiving: true
+            isReceiving: true,
+            isAdding: false
         };
 
         this.eachItem = this.eachItem.bind(this);
@@ -38,26 +39,28 @@ class Board extends Component {
     }
 
     addItem(item) {
-        const arr = this.state.products;
+        const arr = this.state.products.slice();
         arr.push(item);
         this.sendDataToServer(arr);
     }
 
     removeItem(i) {
-        const arr = this.state.products;
+        const arr = this.state.products.slice();
         arr.splice(i, 1);
-        this.sendDataToServer(arr);
+        this.sendDataToServer(arr, i);
     }
 
     updateItem(item, i) {
-        const arr = this.state.products;
+        const arr = this.state.products.slice();
         arr[i] = item;
-        this.sendDataToServer(arr);
+        this.sendDataToServer(arr, i);
     }
 
     eachItem(item, i) {
         return (
-            <Item key={i} index={i} deleteTableRow={this.removeItem} updateTableRow={this.updateItem} permissions={this.props.permissions}>
+            <Item key={i} index={i} deleteTableRow={this.removeItem} 
+            ref={(currItem) => { this["currItem" + i] = currItem }}
+            updateTableRow={this.updateItem} permissions={this.props.permissions}>
                 {item.name}
                 {item.price}
                 {item.currency}
@@ -65,8 +68,10 @@ class Board extends Component {
         );
     }
 
-    sendDataToServer(arr) {
+    sendDataToServer(arr, index) {
         const _self = this;
+        if(index === undefined)
+            this.setState({ isAdding: true });
 
         fetch("https://api.myjson.com/bins/185esz", {
             method: "put",
@@ -77,6 +82,10 @@ class Board extends Component {
             body: JSON.stringify({ "results": arr })
         })
             .then(function () {
+                if(index === undefined)
+                    _self.setState({ isAdding: false })
+                else
+                    _self["currItem" + index].setState({ isLoading : false, isUpdating: false });
                 _self.setState({ products: arr });
                 console.log("Data sent successfully.");
             })
@@ -84,10 +93,10 @@ class Board extends Component {
     }
 
     render() {
-        const { isReceiving, products } = this.state;
+        const { isReceiving, isAdding, products } = this.state;
         return (
             <div>
-                {this.props.permissions.CREATE ? <Form addNewItem={this.addItem} /> : null}
+                {this.props.permissions.CREATE ? <Form addNewItem={this.addItem} isLoading={isAdding}/> : null}
                 <div className="table-responsive">
                     {
                         !isReceiving && products.length > 0 ?
